@@ -16,7 +16,7 @@ export class ContactList extends Component {
         
         {
             this.props.contacts.map(contact=>
-                <ContactCard contact={contact} key={contact.id} />
+                <ContactCard contact={contact} key={contact.id} deleteHandler={this.props.deleteHandler} />
             )
         }
       </div>

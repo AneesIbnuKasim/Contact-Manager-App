@@ -10,7 +10,6 @@ function AddContacts(props) {
     const handleClick = (e)=>{
         e.preventDefault()
         
-        
         if(contact.name ==='' || contact.email =='') {
             alert('All fields are mandatory') 
             return

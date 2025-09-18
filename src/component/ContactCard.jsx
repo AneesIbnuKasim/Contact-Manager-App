@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import './contactCard.css'
 
 function ContactCard(props) {
-    console.log('card:',props);
     const {id, name, email} = props.contact
+    const {deleteHandler} = props
     
   return (
     <div className='container'>
@@ -15,7 +15,7 @@ function ContactCard(props) {
         <h1>{name}</h1>
         <Link to={`/contact-details/${id}`}><p>{email}</p></Link>
         </div>
-        <Link className='delete' to={`/delete/${id}`}><img src="../../public/images/delete-blue.jpg" alt="" /></Link>
+        <img onClick={()=>deleteHandler(id)} className='delete' src="../../public/images/delete-blue.jpg" alt="" />
       </div>
     </div>
   )

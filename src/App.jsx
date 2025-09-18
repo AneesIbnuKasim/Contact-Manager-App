@@ -2,18 +2,9 @@ import { useEffect, useState } from 'react'
 import ContactList from './component/ContactList'
 import { Route, Routes } from 'react-router-dom'
 import AddContacts from './component/AddContacts'
+import { v4 as uuid } from 'uuid';
 
 function App() {
-  const contact = [{
-    id: '1',
-    name: 'name1',
-    email: 'email1'
-  },{
-    id: '2',
-    name: 'name2',
-    email: 'email2'
-  }
-]
 
 const LOCAL_STORAGE_KEY = 'contacts'
 
@@ -25,17 +16,17 @@ const [contacts, setContacts] = useState(()=>{
   )
 
 const addContact = (contact)=>{
-  console.log('contact');
-  setContacts([...contacts, contact])  
+  setContacts([...contacts, {id:uuid(), ...contact}])  
+}
+
+const deleteContact = (id)=>{
+  const filteredContact = contacts.filter(contact=>id!=contact.id)
+  setContacts(filteredContact)
 }
 
 
 
-
-
 useEffect(()=>{
-  console.log('first get');
-  
   const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
   if(retriveContacts) {
     setContacts(retriveContacts)
@@ -43,7 +34,6 @@ useEffect(()=>{
 },[])
 
 useEffect(()=>{
-  console.log('contacts:',contacts);
     localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(contacts))
 },[contacts])
 
@@ -53,7 +43,7 @@ useEffect(()=>{
     
     <>
     <AddContacts addFunction={addContact}/>
-    <ContactList contacts={contacts}/>
+    <ContactList contacts={contacts} deleteHandler={deleteContact}/>
 
 
       {/* <Routes>
