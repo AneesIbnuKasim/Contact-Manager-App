@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import ContactList from './component/ContactList'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes , useNavigate} from 'react-router-dom'
 import AddContacts from './component/AddContacts'
 import { v4 as uuid } from 'uuid';
+import ContactDetail from './component/ContactDetail';
 
 function App() {
 
 const LOCAL_STORAGE_KEY = 'contacts'
+const navigate = useNavigate()
 
 const [contacts, setContacts] = useState(()=>{
   const contact = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
@@ -16,7 +18,8 @@ const [contacts, setContacts] = useState(()=>{
   )
 
 const addContact = (contact)=>{
-  setContacts([...contacts, {id:uuid(), ...contact}])  
+  setContacts([...contacts, {id:uuid(), ...contact}]) 
+  navigate('/')
 }
 
 const deleteContact = (id)=>{
@@ -42,14 +45,15 @@ useEffect(()=>{
 
     
     <>
-    <AddContacts addFunction={addContact}/>
-    <ContactList contacts={contacts} deleteHandler={deleteContact}/>
+    {/* <AddContacts addFunction={addContact}/>
+    <ContactList contacts={contacts} deleteHandler={deleteContact}/> */}
 
 
-      {/* <Routes>
-        <Route path='/' element={<ContactList contacts={contacts}  />}></Route>
+      <Routes>
+        <Route path='/' element={<ContactList contacts={contacts} deleteHandler={deleteContact}  />}></Route>
         <Route path='/add-contact' element={<AddContacts addFunction={addContact}/>} ></Route>
-      </Routes> */}
+        <Route path='contact-details/:id' element={<ContactDetail/>}></Route>
+      </Routes>
     </>
   )
 }
