@@ -26,8 +26,6 @@ export class ContactList extends Component {
             cursor:'pointer', boxShadow:'0 10px 10px rgba(8, 27, 30, 0.5)'
         }}><Link to={'/add-contact'} style={{color:'white'}}>Add Contacts</Link></button>
         </div>
-        {this.props.contacts.length >0 ? ( 
-          <>
   <div style={{position:'relative',width:'30%'
         }}>
         <input value={this.state.searchInput} onChange={(e)=>this.setState({searchInput:e.target.value})} style={{outline:'none',width:'100%',position:'relative'
@@ -35,6 +33,8 @@ export class ContactList extends Component {
         <FaSearch size={20} style={{position:'absolute',top:'25%',right:'8px'}}/>
         </div> 
          <hr />
+         {this.props.contacts.length >0 ? ( 
+          <>
         
         {
             this.props.contacts.map(contact=>
