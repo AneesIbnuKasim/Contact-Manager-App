@@ -10,7 +10,7 @@ function ContactCard(props) {
   return (
     <div className='container'>
       <div className="contact-card">
-      <img className='image' src="../../public/images/contact.jpg" alt="" />
+      <img className='image' src="/images/contact.jpg" alt="" />
         <div className='info'>
         
         <h1>{name}</h1>
