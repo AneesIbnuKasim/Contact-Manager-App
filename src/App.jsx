@@ -12,6 +12,8 @@ function App() {
 
 const LOCAL_STORAGE_KEY = 'contacts'
 const navigate = useNavigate()
+const [searchTerm, setSearchTerm] = useState('')
+const [searchList, setSearchList] = useState([])
 
 const [contacts, setContacts] = useState(()=>{
   const contact = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
@@ -79,6 +81,20 @@ const deleteContact = async(id)=>{
   }
 }
 
+const searchContact = (searchKeyword)=>{
+  setSearchTerm(searchKeyword)
+  if(searchKeyword) {
+   const searchOutput = contacts.filter(contact=>{
+    return Object.values(contact).join('').toLowerCase().includes(searchKeyword.toLowerCase())
+   })
+   setSearchList(searchOutput)
+  }
+  else {
+    setSearchList(contacts)
+  }
+  
+}
+
 
 
 useEffect(()=>{
@@ -109,7 +125,7 @@ useEffect(()=>{
 
 
       <Routes>
-        <Route path='/' element={<ContactList contacts={contacts} deleteHandler={deleteContact}  />}></Route>
+        <Route path='/' element={<ContactList contacts={searchTerm.length>1 ? searchList : contacts} deleteHandler={deleteContact} searchHandler={searchContact}  />}></Route>
         <Route path='/add-contact' element={<AddContacts addFunction={addContact}/>} ></Route>
         <Route path='/edit-contact/:id' element={<EditContacts editFunction={editContact}/>} ></Route>
         <Route path='contact-details/:id' element={<ContactDetail/>}></Route>
