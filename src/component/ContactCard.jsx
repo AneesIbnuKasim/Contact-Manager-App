@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import './contactCard.css'
+import { FaEdit } from "react-icons/fa";
 
 function ContactCard(props) {
     const {id, name, email} = props.contact
@@ -17,7 +18,11 @@ function ContactCard(props) {
         <Link to={`/contact-details/${id}`} 
   state={{ contact: props.contact }} ><p>{email}</p></Link>
         </div>
-        <img onClick={()=>deleteHandler(id)} className='delete image' src="../../public/images/delete-blue.jpg" alt="" />
+        <div className="delete icon-container">
+        <Link to={`/edit-contact/${id}`} state={{ contact: props.contact }}><i className='icon' > <FaEdit size={50} color="green" /></i></Link>
+        <img onClick={()=>deleteHandler(id)} className=' image' src="../../public/images/delete-blue.jpg" alt="" />
+        </div>
+        
       </div>
     </div>
   )

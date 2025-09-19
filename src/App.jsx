@@ -5,6 +5,7 @@ import AddContacts from './component/AddContacts'
 import { v4 as uuid } from 'uuid';
 import ContactDetail from './component/ContactDetail';
 import api from './axios/axiosConfig';
+import EditContacts from './component/EditContacts';
 
 
 function App() {
@@ -27,7 +28,6 @@ const retriveContact = async()=>{
     
   } catch (error) {
     console.log(error.message);
-    
   }
 }
 
@@ -44,7 +44,28 @@ const addContact = async(contact)=>{
   navigate('/')
   } catch (error) {
     console.log(error.message);
-    
+  }
+}
+const editContact = async(contact)=>{
+  try {
+  const response = await api.put(`/contacts/${contact.id}`,contact)
+  const {id} = response?.data
+  console.log('reponse.data',response.data);
+  
+  if(id) {
+    const updatedContact = contacts.map(contact=>{
+      return contact.id === id ?  response.data: contact
+    })
+    console.log('updated',updatedContact);
+    setContacts(updatedContact)
+    navigate('/')
+  }
+  
+  // setContacts([...contacts, {id:uuid(), ...contact}]) 
+  // setContacts([...contacts, response.data]) 
+  // navigate('/')
+  } catch (error) {
+    console.log(error.message);
   }
 }
 
@@ -55,7 +76,6 @@ const deleteContact = async(id)=>{
   setContacts(filteredContact)
   } catch (error) {
     console.log(error.message);
-    
   }
 }
 
@@ -70,8 +90,7 @@ useEffect(()=>{
   const getAllContacts = async()=>{
     const newList = await retriveContact()
     if(newList) setContacts(newList)
-    console.log('new list',newList);
-    
+      return
   }
 getAllContacts()
 },[])
@@ -92,6 +111,7 @@ useEffect(()=>{
       <Routes>
         <Route path='/' element={<ContactList contacts={contacts} deleteHandler={deleteContact}  />}></Route>
         <Route path='/add-contact' element={<AddContacts addFunction={addContact}/>} ></Route>
+        <Route path='/edit-contact/:id' element={<EditContacts editFunction={editContact}/>} ></Route>
         <Route path='contact-details/:id' element={<ContactDetail/>}></Route>
       </Routes>
     </>
