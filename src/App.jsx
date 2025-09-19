@@ -4,6 +4,8 @@ import { Route, Routes , useNavigate} from 'react-router-dom'
 import AddContacts from './component/AddContacts'
 import { v4 as uuid } from 'uuid';
 import ContactDetail from './component/ContactDetail';
+import api from './axios/axiosConfig';
+
 
 function App() {
 
@@ -17,27 +19,65 @@ const [contacts, setContacts] = useState(()=>{
 }
   )
 
-const addContact = (contact)=>{
-  setContacts([...contacts, {id:uuid(), ...contact}]) 
-  navigate('/')
+//retrive contacts
+const retriveContact = async()=>{
+  try {
+    const response = await api.get('/contacts')
+  return response.data
+    
+  } catch (error) {
+    console.log(error.message);
+    
+  }
 }
 
-const deleteContact = (id)=>{
+const addContact = async(contact)=>{
+  try {
+    const request = 
+      {
+        id:uuid(), 
+      ...contact
+      }
+  const response = await api.post('/contacts',request)
+  // setContacts([...contacts, {id:uuid(), ...contact}]) 
+  setContacts([...contacts, response.data]) 
+  navigate('/')
+  } catch (error) {
+    console.log(error.message);
+    
+  }
+}
+
+const deleteContact = async(id)=>{
+  try {
+    await api.delete(`/contacts/${id}`)
   const filteredContact = contacts.filter(contact=>id!=contact.id)
   setContacts(filteredContact)
+  } catch (error) {
+    console.log(error.message);
+    
+  }
 }
 
 
 
 useEffect(()=>{
-  const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
-  if(retriveContacts) {
-    setContacts(retriveContacts)
+
+  // const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+  // if(retriveContacts) {
+  //   setContacts(retriveContacts)
+  // }
+  const getAllContacts = async()=>{
+    const newList = await retriveContact()
+    if(newList) setContacts(newList)
+    console.log('new list',newList);
+    
   }
+getAllContacts()
 },[])
 
 useEffect(()=>{
-    localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(contacts))
+    // localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(contacts))
 },[contacts])
 
 
